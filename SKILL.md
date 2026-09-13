@@ -37,10 +37,10 @@ The main agent's model is the default. Only pick a specific `subagent_type` for 
 | subagent_type                | model                             | Best for                              |
 |-------------------------------|-----------------------------------|---------------------------------------|
 | `swarm-worker` (default)      | inherits main agent's model       | anything, uniform swarm               |
-| `swarm-worker-kimi`           | `ark-agentplan/kimi-k2.7-code`   | code-heavy, refactor, implement       |
-| `swarm-worker-deepseek`       | `dpsk-api/deepseek-v4-pro`       | deep reasoning, long-context analysis |
-| `swarm-worker-glm`            | `ark-agentplan/glm-5.2`          | balanced reasoning, text tasks        |
-| `swarm-worker-minimax`        | `ark-agentplan/minimax-m3`       | creative / divergent-angle takes      |
+
+> Note: `swarm-worker` / `swarm-worker` / `swarm-worker` were
+> removed — their agent files no longer exist. To route a worker to a specific
+> model, create `~/.config/opencode/agents/swarm-worker-<name>.md` pinned to it.
 
 Also usable when appropriate:
 - `explore` — read-only codebase reconnaissance
@@ -55,19 +55,19 @@ If the user says "让 X 模型做 Y 部分", map to the matching `swarm-worker-*
 
 ```
 Task: "重构 auth 模块 + 加单测 + 审计安全"
-  ├─ worker-A (swarm-worker-kimi):     refactor
+  ├─ worker-A (swarm-worker):     refactor
   ├─ worker-B (swarm-worker):          write tests
-  └─ worker-C (swarm-worker-deepseek): security audit (read-only advisory)
+  └─ worker-C (swarm-worker): security audit (read-only advisory)
 ```
 
 ### 3b · Multi-angle (same question, different perspectives, then reconcile)
 
 ```
 Task: "评估用 SQLite 还是 Postgres 存这个数据"
-  ├─ worker-A (swarm-worker-deepseek): arguing FOR SQLite
-  ├─ worker-B (swarm-worker-deepseek): arguing FOR Postgres
-  ├─ worker-C (swarm-worker-glm):      neutral trade-off matrix
-  └─ worker-D (swarm-worker-minimax):  edge-case / migration-path angle
+  ├─ worker-A (swarm-worker): arguing FOR SQLite
+  ├─ worker-B (swarm-worker): arguing FOR Postgres
+  ├─ worker-C (swarm-worker):      neutral trade-off matrix
+  └─ worker-D (swarm-worker):  edge-case / migration-path angle
 ```
 
 ### 3c · Divide-by-region (large surface, spatially split)
@@ -159,8 +159,8 @@ Main agent decision: multi-angle, 3 workers parallel.
 
 ```
 task(swarm-worker,          "研究 opencode-mem 的能力与缺点 …")
-task(swarm-worker-deepseek, "研究 mem0 的能力与缺点 …")
-task(swarm-worker-glm,      "研究 letta 的能力与缺点 …")
+task(swarm-worker, "研究 mem0 的能力与缺点 …")
+task(swarm-worker,      "研究 letta 的能力与缺点 …")
 ```
 
 All 3 return. Main agent picks in-line synthesis, writes:
@@ -173,8 +173,8 @@ opencode-mem 因 X/Y/Z 胜出，mem0 弱在 A，letta 弱在 B。
 ...
 ## 分工回顾
 - worker-A (swarm-worker): opencode-mem 特性 …
-- worker-B (swarm-worker-deepseek): mem0 …
-- worker-C (swarm-worker-glm): letta …
+- worker-B (swarm-worker): mem0 …
+- worker-C (swarm-worker): letta …
 ## 置信度
 high — 三份独立调研在 X/Y 上达成一致
 ```
